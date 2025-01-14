@@ -1,4 +1,4 @@
-const serverURL = "https://192.168.18.131:3000/gps";
+const serverURL = "https://cade-o-trui-api.vercel.app/api/gps";
 
 function sendGPSLocation() {
     if (navigator.geolocation) {
