@@ -1,5 +1,12 @@
 import Cors from "cors";
 
+const stops = [
+    {
+        long: "-3.9068821896328734", 
+        lat: "-38.50717215680889"
+    }
+];
+
 const cors = Cors({
     origin: "https://cade-o-trui.vercel.app",
     methods: ["POST", "OPTIONS"],
@@ -14,7 +21,7 @@ function runMiddleware(req, res, fn) {
             return resolve(result);
         });
     });
-}
+};
 
 export default async function handler(req, res) {
     await runMiddleware(req, res, cors);
@@ -27,6 +34,13 @@ export default async function handler(req, res) {
     if (req.method === "POST") {
         const { latitude, longitude } = req.body;
 
+        fetch(`https://api.openrouteservice.org/v2/directions/driving-hgv?api_key=5b3ce3597851110001cf62487d62eddd40584e01bcbf33b38ebc3ece&start=${longitude},${latitude}&end=${stops[0].long},${stops[0].lat}`, {
+            method: "GET",
+            headers: {"Content-Type": "application/json"}
+        })
+        .then(response => console.log(response.json()))
+        .catch(error => console.log("Ocorreu algum erro ao enviar informações de GPS: ", error));;
+
         console.log(
             `Informações de GPS recebidas com êxito | Latitude: ${latitude} | Longitude: ${longitude}`
         );
@@ -35,4 +49,4 @@ export default async function handler(req, res) {
         res.setHeader("Allow", ["POST"]);
         res.status(405).send(`Método ${req.method} não permitido.`);
     }
-}
+};
