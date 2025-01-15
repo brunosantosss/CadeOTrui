@@ -1,5 +1,6 @@
 import Cors from "cors";
-import { response } from "express";
+
+// https://api.openrouteservice.org/v2/directions/driving-hgv?api_key=5b3ce3597851110001cf62487d62eddd40584e01bcbf33b38ebc3ece&start=-38.5189727,-3.9033625&end=-38.50717215680889,-3.9068821896328734
 
 const stops = [
     {
@@ -34,10 +35,10 @@ export default async function handler(req, res) {
 
     if (req.method === "POST") {
         const { latitude, longitude } = req.body;
-
+        
         try {
-            console.log(`usuario: ${latitude}, ${longitude} | parada: ${stops[0].long}, ${stops[0].lat}`)
-            const response = await fetch(`https://api.openrouteservice.org/v2/directions/driving-hgv?api_key=5b3ce3597851110001cf62487d62eddd40584e01bcbf33b38ebc3ece&start=${longitude},${latitude}&end=${stops[0].long},${stops[0].lat}`, {
+            console.log(`Usuario: ${latitude}, ${longitude} | parada: ${stops[0].long}, ${stops[0].lat}`)
+            const response = await fetch(`https://api.openrouteservice.org/v2/directions/driving-hgv?api_key=5b3ce3597851110001cf62487d62eddd40584e01bcbf33b38ebc3ece&start=${longitude},${latitude}&end=${stops[0].lat},${stops[0].long}`, {
                 method: "GET",
                 headers: {"Content-Type": "application/json"}
             });
