@@ -6,7 +6,7 @@ function sendGPSLocation() {
             position => {
                 const { latitude, longitude } = position.coords;
                 console.log(latitude, longitude);
-                alert("FOI3");
+                alert(`Suas coordenadas: ${latitude}, ${longitude}`);
         
                 fetch(serverURL, {
                     method: "POST",
