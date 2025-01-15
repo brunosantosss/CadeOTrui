@@ -1,12 +1,10 @@
 import Cors from "cors";
 
-// Configurando o middleware de CORS
 const cors = Cors({
-    origin: "https://cade-o-trui.vercel.app", // Domínio permitido
-    methods: ["POST", "OPTIONS"], // Métodos permitidos
+    origin: "https://cade-o-trui.vercel.app",
+    methods: ["POST", "OPTIONS"],
 });
 
-// Helper para executar middlewares
 function runMiddleware(req, res, fn) {
     return new Promise((resolve, reject) => {
         fn(req, res, (result) => {
@@ -19,16 +17,13 @@ function runMiddleware(req, res, fn) {
 }
 
 export default async function handler(req, res) {
-    // Rodando o middleware de CORS
     await runMiddleware(req, res, cors);
 
-    // Tratando requisições OPTIONS
     if (req.method === "OPTIONS") {
         res.status(204).end();
         return;
     }
 
-    // Lidando com o método POST
     if (req.method === "POST") {
         const { latitude, longitude } = req.body;
 
