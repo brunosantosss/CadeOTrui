@@ -45,7 +45,9 @@ export default async function handler(req, res) {
                 }
                 return response.json();
             })
-            .then(data => console.log(data))
+            .then(data => {
+                console.log("Teste > ", data);
+            })
             .catch(error => console.log("Ocorreu algum erro ao enviar informações de GPS: ", error));
 
         console.log(
