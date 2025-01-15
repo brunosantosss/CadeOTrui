@@ -1,16 +1,34 @@
-export default function handler(req, res) {
-    // Configurando os cabeçalhos de CORS
-    res.setHeader("Access-Control-Allow-Origin", "https://cade-o-trui.vercel.app"); // Domínio permitido
-    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS"); // Métodos permitidos
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type"); // Cabeçalhos permitidos
+import Cors from "cors";
 
-    // Tratamento para requisições OPTIONS (Preflight request)
+// Configurando o middleware de CORS
+const cors = Cors({
+    origin: "https://cade-o-trui.vercel.app", // Domínio permitido
+    methods: ["POST", "OPTIONS"], // Métodos permitidos
+});
+
+// Helper para executar middlewares
+function runMiddleware(req, res, fn) {
+    return new Promise((resolve, reject) => {
+        fn(req, res, (result) => {
+            if (result instanceof Error) {
+                return reject(result);
+            }
+            return resolve(result);
+        });
+    });
+}
+
+export default async function handler(req, res) {
+    // Rodando o middleware de CORS
+    await runMiddleware(req, res, cors);
+
+    // Tratando requisições OPTIONS
     if (req.method === "OPTIONS") {
-        res.status(204).end(); // Responde com status 204 (sem conteúdo) para OPTIONS
+        res.status(204).end();
         return;
     }
 
-    // Tratamento para requisições POST
+    // Lidando com o método POST
     if (req.method === "POST") {
         const { latitude, longitude } = req.body;
 
@@ -19,7 +37,6 @@ export default function handler(req, res) {
         );
         res.status(200).send("Dados recebidos com sucesso.");
     } else {
-        // Método não permitido
         res.setHeader("Allow", ["POST"]);
         res.status(405).send(`Método ${req.method} não permitido.`);
     }
